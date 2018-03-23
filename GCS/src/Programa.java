@@ -1,41 +1,40 @@
-import java.util.HashMap;
+
 import java.util.Scanner;
 
 public class Programa {
 
     static Robot fofo;
-    public static HashMap<String, String> robos;
     static String nrobo;
     static int count = 0;
     static int xArea;
     static int yArea;
+    static String area;
+    static String var = "";
+    static boolean sair = false;
 
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
         nrobo = "robo";
-        robos = new HashMap<>();
 
-        String var = "";
+
+        System.out.println("Informe o tamanho da área que sera percorrida");
+        area = in.nextLine();
 
         criaRobot();
 
-        System.out.println("Digite 'sair' para sair do programa");
-        System.out.println("Informe o tamanho da área que sera percorrida");
-        String area = in.nextLine();
 
-        xArea = Integer.parseInt(area.split(" ")[0]);
-        yArea = Integer.parseInt(area.split(" ")[1]);
+        while (true) {
+            if(sair){
+                System.out.println("Se deseja sair digite 'sair'");
+                String sairS = in.next();
+                if(sairS.equalsIgnoreCase("sair")){
+                    System.out.println("Bye Bye");
 
-        while (var != "sair") {
-            System.out.println("Insira os movimentos");
-            var = in.nextLine();
-
-            moveRobo(var);
-
-            System.out.println("Digite 'outro' para adicionar um robozinho fofo");
-            var = in.nextLine();
-
-            if (var.equals("outro")) {
+                    return;
+                }
+                sair = false;
+            }
+            else {
                 criaRobot();
             }
         }
@@ -43,6 +42,11 @@ public class Programa {
 
     private static void criaRobot() {
         Scanner in = new Scanner(System.in);
+        Scanner in2 = new Scanner (System.in);
+
+        if(!sair){
+            sair = true;
+        }
 
         System.out.println("Informe a posição inicial (x e y) para o robozinho fofo");
         String xy = in.nextLine();
@@ -55,12 +59,22 @@ public class Programa {
         int x = Integer.parseInt(valores[0]);
         int y = Integer.parseInt(valores[1]);
 
+        xArea = Integer.parseInt(area.split(" ")[0]);
+        yArea = Integer.parseInt(area.split(" ")[1]);
+
         fofo = new Robot(x, y, dir, xArea, yArea);
 
-        String coord = x + "" + y;
-        nrobo = nrobo + count;
-        robos.put(coord, nrobo);
-        count++;
+        System.out.println(fofo+"\n");
+
+        var = "";
+
+        System.out.println("Insira os movimentos");
+        var = in2.nextLine();
+
+        moveRobo(var);
+
+        System.out.println("\n\n\n\n\n\n"+fofo+"\n\n\n\n\n\n");
+
     }
 
     private static void moveRobo(String movimentos) {
@@ -68,15 +82,37 @@ public class Programa {
 
         for (int i = 0; i < mov.length; i++) {
             if (mov[i].equals("L")) {
-                fofo.setDir(Robot.Direcao.valueOf("L"));
-            } else if (mov[i].equals("O")) {
-                fofo.setDir(Robot.Direcao.valueOf("O"));
-            } else if (mov[i].equals("N")) {
-                fofo.setDir(Robot.Direcao.valueOf("N"));
-            } else if (mov[i].equals("S")) {
-                fofo.setDir(Robot.Direcao.valueOf("S"));
+                switch (fofo.getDir()) {
+                    case N:
+                        fofo.setDir(Robot.Direcao.O);
+                        break;
+                    case L:
+                        fofo.setDir(Robot.Direcao.N);
+                        break;
+                    case O:
+                        fofo.setDir(Robot.Direcao.S);
+                        break;
+                    case S:
+                        fofo.setDir(Robot.Direcao.L);
+                        break;
+                }
+            } else if (mov[i].equals("R")) {
+                switch (fofo.getDir()) {
+                    case N:
+                        fofo.setDir(Robot.Direcao.L);
+                        break;
+                    case L:
+                        fofo.setDir(Robot.Direcao.S);
+                        break;
+                    case O:
+                        fofo.setDir(Robot.Direcao.N);
+                        break;
+                    case S:
+                        fofo.setDir(Robot.Direcao.O);
+                        break;
+                }
             } else if (mov[i].equals("M")) {
-                if (!fofo.anda(Integer.parseInt(mov[i]))) {
+                if (!fofo.anda()) {
                     System.out.println("Houston, temos um problema");
                     return;
                 }

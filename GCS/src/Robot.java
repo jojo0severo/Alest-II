@@ -37,11 +37,15 @@ public class Robot {
         this.y = y;
     }
 
+    public void setMaxX(int maxX){this.maxX = maxX;}
+
+    public void setMaxY(int maxY){this.maxY = maxY;}
+
     public void setDir(Direcao dir) {
         this.dir = dir;
     }
 
-    public boolean anda(int pos) {
+    public boolean anda() {
         if (dir.toString().equals("S")) {
             y = y - 1;
         } else if (dir.toString().equals("N")) {
@@ -52,12 +56,7 @@ public class Robot {
         } else if (dir.toString().equals("O")) {
             x = x - 1;
         }
-        String coords = x + "" + y;
-        for (String key : Programa.robos.keySet()) {
-            if (key.equals(coords)) {
-                return false;
-            }
-        }
+
         if (y < 0 || y > maxY) {
             return false;
         }
@@ -66,5 +65,8 @@ public class Robot {
             return false;
         }
         return true;
+    }
+    public String toString(){
+        return "Posicao X: " + x + "  Posicao y: " + y + "  Direcao: " + dir + "  Max X:" + maxX + "  Max Y: " + maxY;
     }
 }
